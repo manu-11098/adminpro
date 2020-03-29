@@ -4,14 +4,19 @@ import { NgModule } from '@angular/core';
 // Modules
 import { FormsModule } from '@angular/forms';
 import { PagesModule } from './pages/pages.module';
+import { ServiceModule } from './services/service.module';
 
 // Routes
 import { AppRoutingModule } from './app-routing.module';
+
+
 
 // Components
 import { AppComponent } from './app.component';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './login/register.component';
+
+
 
 
 
@@ -25,9 +30,10 @@ import { RegisterComponent } from './login/register.component';
     BrowserModule,
     FormsModule,
     PagesModule,
+    ServiceModule,
     AppRoutingModule
   ],
-  providers: [],
+  providers: [ ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

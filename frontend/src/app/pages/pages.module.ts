@@ -15,6 +15,7 @@ import { ProgressComponent } from './progress/progress.component';
 import { Graphics1Component } from './graphics1/graphics1.component';
 import { IncreaserComponent } from '../components/increaser/increaser.component';
 import { GraphicDoughnutComponent } from '../components/graphic-doughnut/graphic-doughnut.component';
+import { AccountSettingsComponent } from './account-settings/account-settings.component';
 
 
 @NgModule({
@@ -25,6 +26,7 @@ import { GraphicDoughnutComponent } from '../components/graphic-doughnut/graphic
         Graphics1Component,
         IncreaserComponent,
         GraphicDoughnutComponent,
+        AccountSettingsComponent,
     ],
     exports: [
         PagesComponent,
@@ -34,7 +36,6 @@ import { GraphicDoughnutComponent } from '../components/graphic-doughnut/graphic
     ],
     imports: [
         SharedModule,
-
         ChartsModule,
         FormsModule,
         PagesRoutingModule
