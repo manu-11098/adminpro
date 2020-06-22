@@ -16,6 +16,8 @@ import { Graphics1Component } from './graphics1/graphics1.component';
 import { IncreaserComponent } from '../components/increaser/increaser.component';
 import { GraphicDoughnutComponent } from '../components/graphic-doughnut/graphic-doughnut.component';
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
+import { PromisesComponent } from './promises/promises.component';
+import { RxjsComponent } from './rxjs/rxjs.component';
 
 
 @NgModule({
@@ -27,6 +29,8 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
         IncreaserComponent,
         GraphicDoughnutComponent,
         AccountSettingsComponent,
+        PromisesComponent,
+        RxjsComponent,
     ],
     exports: [
         PagesComponent,
