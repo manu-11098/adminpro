@@ -1,17 +1,41 @@
 version: '3.7'
 
+volumes:
+    mongo-volume:
+      external:
+        name: mongo-volume
+        
+        
 services: 
-  web: 
-    build: './frontend'
+  db:
+    image: mongo:4.0
     restart: always
     networks:
       net:
         aliases:
-          - web    
-    ports: 
-      - "80:80" 
-    container_name: web
-    hostname: web   
+          - db
+    ports:
+      - "27017:27017"
+    container_name: db
+    hostname: db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+      MONGO_INITDB_DATABASE: hospitaldb
+    volumes:
+      - ./backend/mongo-dump:/docker-entrypoint-initdb.d
+      - mongo-volume:/data/db
+#  web: 
+#    build: './frontend'
+#    restart: always
+#    networks:
+#      net:
+#        aliases:
+#          - web    
+#    ports: 
+#      - "80:80" 
+#    container_name: web
+#    hostname: web   
 
 
 networks:
