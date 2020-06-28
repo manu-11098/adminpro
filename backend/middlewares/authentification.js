@@ -9,7 +9,7 @@ exports.verify = ( req, res, next ) => {
                 message: 'Incorrect token',
                 errors: err
             });
-        req.tokendata = decoded;
+        req.user = decoded.user;
         next();
     });
 };

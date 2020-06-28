@@ -13,27 +13,33 @@ var authentification    = require('../middlewares/authentification');
 var app         = express();
 var verify      = authentification.verify;
 
+/**
+ * Get all users
+ */
 app.get('/', (req, res) => {
-    User.find({}, 'id name email img role')
+    let from = Number(req.query.from) || 0;
+    User.find({}, 'name email img role')
+        .skip(from)
+        .limit(5)
         .exec()
-        .then( users => res.status(200).json( { ok: true, users } ) )
+        .then( users => { 
+            User.count({})
+                .exec()
+                .then( count => res.status(200).json( { ok: true, users, count } ) ) 
+        } )
         .catch( errors => res.status(500).json({ ok: false, message: 'Error en la base de datos', errors }) );
 });
-
-
 
 /**
  * Add user
  */
 app.post('/', verify, (req, res) => {
-    var body = req.body;
-
     var user = new User({
-        name: body.name,
-        email: body.email,
-        password: bcrypt.hashSync(body.password, 10),
-        img: body.img,
-        role: body.role
+        name: req.body.name,
+        email: req.body.email,
+        password: bcrypt.hashSync(req.body.password, 10),
+        img: req.body.img,
+        role: req.body.role
     });
 
     user.save()
@@ -60,7 +66,7 @@ app.put('/:id', verify, (req, res) => {
         })
         .then( updatedUser => { 
             updatedUser.password = '*'
-            res.status(200).json( { ok: true, updatedUser } ) 
+            return res.status(200).json( { ok: true, updatedUser } ) 
         } )
         .catch( errors => res.status(500).json( { ok: false, message: 'Error al actualizar el usuario', errors } ) );
 });
