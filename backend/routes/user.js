@@ -53,22 +53,22 @@ app.post('/', verify, (req, res) => {
 /**
  * Update user
  */
-app.put('/:id', verify, (req, res) => { 
-    User.findById(req.params.id).exec()
-        .then(user => {
-            if ( user ) {
-                user.name = req.body.name;
-                user.email = req.body.email;
-                user.role = req.body.role;
-                return user.save();
-            }
-            return res.status(500).json( { ok: false, message: `El usuario con id: ${ req.params.id } no existe` } );
-        })
-        .then( updatedUser => { 
-            updatedUser.password = '*'
-            return res.status(200).json( { ok: true, updatedUser } ) 
-        } )
-        .catch( errors => res.status(500).json( { ok: false, message: 'Error al actualizar el usuario', errors } ) );
+app.put('/:id', verify, async (req, res) => { 
+
+    try {
+        let user = await User.findById(req.params.id).exec();
+        if (user) {
+            user.name = req.body.name;
+            user.email = req.body.email;
+            user.role = req.body.role;
+            user = await user.save();
+            res.status(200).json({ ok: true, user });
+        } else 
+            res.status(401).json( { ok: false, message: `El user con id: ${ req.params.id } no existe` } );
+    } catch ( error ){
+        res.status(500).json( { ok: false, message: 'Error al actualizar el user', error } );
+    }
+
 });
 
 /**
@@ -78,8 +78,9 @@ app.delete('/:id', verify, (req, res) => {
     User.findByIdAndRemove(req.params.id).exec()
         .then( deletedUser => { 
             if (deletedUser)
-                return res.status(200).json({ ok: true, deletedUser })
-            return res.status(400).json({ ok: false, message: `El usuario con id: ${req.params.id} no existe` });
+                res.status(200).json({ ok: true, deletedUser });
+            else
+                res.status(400).json({ ok: false, message: `El usuario con id: ${req.params.id} no existe` });
         })
         .catch( errors => res.status(500).json({ ok: false,  message: 'Error interno al borrar usuario', errors }) );
 });

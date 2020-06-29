@@ -50,20 +50,20 @@ app.post('/', verify, (req, res) => {
 /**
  * Update a doctor
  */
-app.put('/:id', verify, (req, res) => {
-    Doctor.findById(req.params.id)
-        .exec()
-        .then( doctor => {
-            if (doctor) {
-                doctor.name = req.body.name;
-                doctor.user = req.user._id;
-                doctor.hospital = req.body.hospital;
-                return doctor.save();
-            } 
-            return res.status(400).json({ ok: false, message: `El médico con id: ${ req.params.id } no existe` });
-        })
-        .then( updatedDoctor =>  res.status(200).json({ ok: true, doctor: updatedDoctor }) )
-        .catch( err => res.status(500).json({ ok: false, message: 'Error interno al actualizar el médico', errors: err.message }) );
+app.put('/:id', verify, async (req, res) => {
+    try {
+        let doctor = await Doctor.findById(req.params.id).exec();
+        if (doctor) {
+            doctor.name = req.body.name;
+            doctor.user = req.user._id;
+            doctor.hospital = req.body.hospital;
+            doctor = await doctor.save();
+            res.status(200).json({ ok: true, doctor });
+        } else 
+            res.status(401).json( { ok: false, message: `El doctor con id: ${ req.params.id } no existe` } );
+    } catch ( error ){
+        res.status(500).json( { ok: false, message: 'Error al actualizar el doctor', error } );
+    }
 });
 
 /**
@@ -73,8 +73,9 @@ app.delete('/:id', verify, (req, res) => {
     Doctor.findByIdAndRemove(req.params.id).exec()
         .then( deletedDoctor => {
             if (deletedDoctor)
-                return res.status(200).json({ ok: true, doctor: deletedDoctor });
-            return res.status(400).json({ ok: false, message: `El doctor con id: ${ req.params.id } no existe` });
+                res.status(200).json({ ok: true, doctor: deletedDoctor });
+            else
+                res.status(400).json({ ok: false, message: `El doctor con id: ${ req.params.id } no existe` });
 		})
 		.catch( err => res.status(500).json({ ok: false,  message: 'Error interno al borrar hospital', errors: err }) );
 });
