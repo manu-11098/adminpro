@@ -33,7 +33,7 @@ app.get('/', (req, res) => {
 /**
  * Add user
  */
-app.post('/', verify, (req, res) => {
+app.post('/', (req, res) => {
     var user = new User({
         name: req.body.name,
         email: req.body.email,

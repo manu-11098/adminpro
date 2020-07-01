@@ -2,6 +2,7 @@
  * Requires
  */ 
 var express     = require('express');
+var cors        = require('cors');
 var mongoose    = require('mongoose');
 var bodyParser  = require('body-parser');
 
@@ -9,6 +10,9 @@ var bodyParser  = require('body-parser');
  * Init variables
  */ 
 var app = express();
+
+
+app.use(cors());
 
 /**
  * Body parser
