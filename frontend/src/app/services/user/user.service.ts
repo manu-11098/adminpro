@@ -3,14 +3,15 @@ import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model';
 import { map } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UserService {
 
-  private user: User;
-  private token: string;
+  public user: User;
+  public token: string;
 
   private readonly url: string = 'http://localhost:3000';
   constructor(public http: HttpClient, private router: Router) { 
@@ -20,11 +21,20 @@ export class UserService {
    }
 
   public save(user: User) {
-    return this.http.post(`${this.url}/user`, user).pipe( map( (data: any) => data.newUser ) );
+    return this.http.post(`${ environment.URL }/user`, user).pipe( map( (data: any) => data.newUser ) );
+  }
+
+  public update(user: User) {
+    let url = `${ environment.URL }/user/${ user._id }?token=${ this.token }`;
+    return this.http.put(url, user).pipe( map( (data: any) => {
+      this.user = data.user;
+      localStorage.setItem('user', JSON.stringify(data.user));
+      return data.user;
+    }));
   }
 
   public loginByGoogle(token: string) {
-    return this.http.post(`${this.url}/login/google`, { token }).pipe( 
+    return this.http.post(`${ environment.URL }/login/google`, { token }).pipe( 
       map( ( data: any ) => {
         localStorage.setItem('id', data.user._id);
         localStorage.setItem('token', data.token);
@@ -39,7 +49,7 @@ export class UserService {
 
 
   public login(email: string, password: string) {
-    return this.http.post(`${this.url}/login`, new User(null, email, password)).pipe( 
+    return this.http.post(`${ environment.URL }/login`, new User(null, email, password)).pipe( 
       map( ( data: any ) => {
         localStorage.setItem('id', data.user._id);
         localStorage.setItem('token', data.token);

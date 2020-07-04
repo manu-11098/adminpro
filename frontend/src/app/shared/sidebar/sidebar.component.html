@@ -9,13 +9,12 @@
       <ul id="sidebarnav">
         <li class="user-profile">
           <a class="has-arrow waves-effect waves-dark" href="#" aria-expanded="false"><img
-              src="../assets/images/users/profile.png" alt="user" /><span class="hide-menu">Steave Jobs
-            </span></a>
+              [src]="user.img | image" alt="user" /><span class="hide-menu">{{ user.name }}</span></a>
           <ul aria-expanded="false" class="collapse">
-            <li><a href="javascript:void()">My Profile </a></li>
+            <li><a routerLinkActive="active" routerLink="/profile">My Profile </a></li>
             <li><a href="javascript:void()">My Balance</a></li>
             <li><a href="javascript:void()">Inbox</a></li>
-            <li><a href="#/accountsettings">Account Setting</a></li>
+            <li><a routerLinkActive="active" routerLink="/accountsettings">Account Setting</a></li>
             <li><a (click)="logout()" style="cursor: pointer">Logout</a></li>
           </ul>
         </li>

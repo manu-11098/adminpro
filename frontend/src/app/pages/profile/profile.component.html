@@ -1,0 +1,55 @@
+<div class="row">
+  <div class="col-lg-7">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title">User profile</h4>
+        <h6 class="card-subtitle">Nombre usuario</h6>
+        <form ngNativeValidate class="form p-t-20" #f="ngForm" (submit)="save(f.value)">
+          <div class="form-group">
+            <label for="exampleInputuname">User Name</label>
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-user"></i></div>
+              <input type="text" 
+                     [ngModel]="user.name" 
+                     name="name" 
+                     class="form-control" 
+                     id="exampleInputuname" 
+                     placeholder="Username" 
+                     required>
+            </div>
+          </div>
+          <div class="form-group">
+            <label for="exampleInputEmail1">Email address</label>
+            <div class="input-group">
+              <div class="input-group-addon"><i class="ti-email"></i></div>
+              <input type="email" [ngModel]="user.email" [disabled]="user.google" name="email" class="form-control" id="exampleInputEmail1" placeholder="Enter email" required>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">
+            <i class="fa fa-save"></i>
+            Save
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <div class="col-lg-5">
+    <div class="card">
+      <div class="card-body">
+        <h4 class="card-title mb-3">User photo</h4>
+        <img *ngIf="!tempImg" [src]="user.img | image" class="img-fluid w-50" alt="Imagen del usuario">
+        <img [src]="tempImg" class="img-fluid w-50" alt="Imagen del usuario">
+
+        <div class="form-group mt-3">
+          <label for=""></label>
+          <input type="file" (change)="select($event.target.files[0])" class="form-control" name="" id="" aria-describedby="helpId" placeholder="">
+          <small id="helpId" class="form-text text-muted">Help text</small>
+        </div>
+        <button (click)="change()" [disabled]="!img" type="button" class="btn btn-block btn-success waves-effect waves-light m-r-10">
+          <i class="fa fa-save"></i>
+          Actualizar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

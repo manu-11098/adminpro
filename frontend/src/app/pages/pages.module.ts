@@ -18,6 +18,10 @@ import { GraphicDoughnutComponent } from '../components/graphic-doughnut/graphic
 import { AccountSettingsComponent } from './account-settings/account-settings.component';
 import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
+import { ImagePipe } from '../pipes/image.pipe';
+import { PipesModule } from '../pipes/pipes.module';
+import { ProfileComponent } from './profile/profile.component';
+import { CommonModule } from '@angular/common';
 
 
 @NgModule({
@@ -31,6 +35,7 @@ import { RxjsComponent } from './rxjs/rxjs.component';
         AccountSettingsComponent,
         PromisesComponent,
         RxjsComponent,
+        ProfileComponent,
     ],
     exports: [
         PagesComponent,
@@ -39,10 +44,12 @@ import { RxjsComponent } from './rxjs/rxjs.component';
         Graphics1Component
     ],
     imports: [
+        CommonModule,
         SharedModule,
         ChartsModule,
         FormsModule,
-        PagesRoutingModule
+        PagesRoutingModule,
+        PipesModule
     ]
 })
 export class PagesModule { }

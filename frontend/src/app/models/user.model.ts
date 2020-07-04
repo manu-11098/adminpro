@@ -6,5 +6,5 @@ export class User {
 		public img?: string, 
 		public role: string = 'USER_ROLE', 
 		public google: boolean  = false, 
-		public id?: string) {}
+		public _id?: string) {}
 }
