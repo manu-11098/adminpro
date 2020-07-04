@@ -13,7 +13,7 @@ export class ImagePipe implements PipeTransform {
     if (img.indexOf('https') >= 0 )
       return img;
 
-    return `${ environment.URL }/images/${ type }/img`;
+    return `${ environment.URL }/${ img }`;
   }
 
 }

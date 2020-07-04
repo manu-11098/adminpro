@@ -27,7 +27,7 @@ export class ProfileComponent implements OnInit {
     this.user.name = user.name;
     this.user.email = user.email;
 
-    this.userService.update(this.user).subscribe( ( updatedUser: any) => {
+    this.userService.updateSessionUser(this.user).subscribe( ( updatedUser: any) => {
       Swal.fire({
         title: 'Usuario actualizado',
         text: `El usuario ${ updatedUser.email } ha sido actualizado`,

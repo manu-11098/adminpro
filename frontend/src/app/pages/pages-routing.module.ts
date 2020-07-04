@@ -10,6 +10,7 @@ import { PromisesComponent } from './promises/promises.component';
 import { RxjsComponent } from './rxjs/rxjs.component';
 import { LoginGuard } from '../services/guards/login.guard';
 import { ProfileComponent } from './profile/profile.component';
+import { UserComponent } from './user/user.component';
 
 const pagesRoutes: Routes = [
     {
@@ -22,6 +23,7 @@ const pagesRoutes: Routes = [
           { path: 'graphics1', component: Graphics1Component, data: { title: 'Graphics' } },
           { path: 'accountsettings', component: AccountSettingsComponent, data: { title: 'Ajustes del tema' } }, 
           { path: 'profile', component: ProfileComponent, data: { title: 'Profile' } },
+          { path: 'user', component: UserComponent, data: { title: 'Mantenimiento de usuarios' } },
           { path: 'promises', component: PromisesComponent, data: { title: 'Promesas' } },
           { path: 'rxjs', component: RxjsComponent, data: { title: 'Observables' } },
           { path: '', redirectTo: '/dashboard', pathMatch: 'full'},

@@ -18,7 +18,7 @@ var verify      = authentification.verify;
  */
 app.get('/', (req, res) => {
     let from = Number(req.query.from) || 0;
-    User.find({}, 'name email img role')
+    User.find({}, 'name email img role google')
         .skip(from)
         .limit(5)
         .exec()

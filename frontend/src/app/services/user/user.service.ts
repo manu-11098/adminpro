@@ -24,7 +24,7 @@ export class UserService {
     return this.http.post(`${ environment.URL }/user`, user).pipe( map( (data: any) => data.newUser ) );
   }
 
-  public update(user: User) {
+  public updateSessionUser(user: User) {
     let url = `${ environment.URL }/user/${ user._id }?token=${ this.token }`;
     return this.http.put(url, user).pipe( map( (data: any) => {
       this.user = data.user;
@@ -76,5 +76,28 @@ export class UserService {
   public getEmail(): string { return localStorage.getItem('email'); }
 
   public deleteEmail() { localStorage.removeItem('email'); }
+
+
+  public getAll(from: number = 0) {
+    const url = `${ environment.URL }/user?from=${ from }`;
+    return this.http.get(url);
+  }
+
+  public getBy(value: string) {
+    const url = `${ environment.URL }/search/collections/users/${ value }`;
+    return this.http.get(url).pipe( map( ( data: any ) => data.users ) );
+  }
+
+  public delete(id: string) {
+    const url = `${ environment.URL }/user/${ id }?token=${ this.token }`; 
+    return this.http.delete(url).pipe( map( ( data: any ) => data.deletedUser ) );
+  }
+
+  public update(user: User) {
+    let url = `${ environment.URL }/user/${ user._id }?token=${ this.token }`;
+    return this.http.put(url, user).pipe( map( (data: any) => {
+      return data.user;
+    }));
+  }
 
 }
