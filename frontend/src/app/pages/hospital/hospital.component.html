@@ -1,0 +1,71 @@
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <input id="" name="" #input type="text" (keyup)="search(input.value)" class="form-control"
+          placeholder="Buscar hospital">
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="row" *ngIf="loading">
+  <div class="col">
+    <div class="alert alert-warning text-center">
+      <strong>Cargando</strong>
+      <br>
+      <i class="fa fa-refresh fa-spin fa-2x"></i>
+      <br>
+      <span>Espere for favor</span>
+    </div>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <div class="card">
+      <div class="card-body">
+        <div class="text-right">
+          <button type="button" class="btn waves-effect waves-light btn-rounded btn-primary" (click)="create()">
+            <i class="fa fa-plus"></i>
+            Crear Hospital
+          </button>
+        </div>
+        <h3 class="card-title">Hospitales registrados (<small>{{ count }}</small>)</h3>
+        <table class="table table-hover">
+          <thead>
+            <tr>
+              <th>Foto</th>
+              <th>Hospital</th>
+              <th></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let hospital of hospitals">
+              <td style="width: 70px">
+                <img [src]="hospital.img | image:'hospital'" class="img-fluid w-75 img-circle" alt="Imagen de hosptial"
+                  (click)="showModal(hospital._id)">
+              </td>
+              <td>
+                <div class="form-group">
+                  <label for=""></label>
+                  <input type="text" class="form-control" [(ngModel)]="hospital.name" name="name" [id]="hospital._id"
+                    aria-describedby="helpId" placeholder="Nombre de hospital">
+                </div>
+              </td>
+              <td>
+                <button type="button" class="btn btn-primary mr-1" (click)="save(hospital)">
+                  <i class="fa fa-save"></i>
+                </button>
+                <button type="button" class="btn btn-danger" (click)="delete(hospital._id)">
+                  <i class="fa fa-trash-o"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+      </div>
+    </div>
+  </div>
+</div>

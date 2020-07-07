@@ -53,7 +53,7 @@ app.get('/collections/:collection/:value', (req, res) => {
                             .populate('hospital')
                             .exec();
                         break;
-        case 'hospital': promise = Hospital
+        case 'hospitals': promise = Hospital
                             .find( { name: { $regex: value, $options: 'i' }})
                             .populate('user', 'name email role')
                             .exec();

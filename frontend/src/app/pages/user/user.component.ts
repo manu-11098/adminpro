@@ -2,8 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user/user.service';
 
-import Swal from 'sweetalert2';
 import { ModalUploadService } from '../../components/modal-upload/modal-upload.service';
+
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user',

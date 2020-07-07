@@ -31,6 +31,24 @@ app.get('/', (req, res) => {
         .catch( errors => res.status(500).json({ ok: false, message: 'Error en la base de datos', errors }) );
 });
 
+/**
+ * Get by id
+ */
+app.get('/:id', async (req, res) => {
+    try {
+        let doctor = await Doctor.findById(req.params.id)
+        .populate('user', 'name email img')
+        .populate('hospital')
+        .exec();
+
+        if (doctor) 
+            res.status(200).json({ ok: true, doctor });
+        else
+            res.status(401).json( { ok: false, message: `El doctor con id: ${ req.params.id } no existe` } ); 
+    } catch (error) {
+        res.status(500).json( { ok: false, message: 'Error al buscar el doctor', error } )
+    }
+});
 
 
 /**
@@ -43,7 +61,7 @@ app.post('/', verify, (req, res) => {
         hospital: req.body.hospital
     });
     doctor.save()
-        .then(newDoctor => res.status(200).json({  ok: true, doctor: newDoctor }) )
+        .then(newDoctor => res.status(200).json({  ok: true, newDoctor }) )
         .catch( err => res.status(500).json({ ok: false, message: 'Error interno al crear el médico', errors: err }) );
 });
 
@@ -57,8 +75,8 @@ app.put('/:id', verify, async (req, res) => {
             doctor.name = req.body.name;
             doctor.user = req.user._id;
             doctor.hospital = req.body.hospital;
-            doctor = await doctor.save();
-            res.status(200).json({ ok: true, doctor });
+            updatedDoctor = await doctor.save();
+            res.status(200).json({ ok: true, updatedDoctor });
         } else 
             res.status(401).json( { ok: false, message: `El doctor con id: ${ req.params.id } no existe` } );
     } catch ( error ){
@@ -73,7 +91,7 @@ app.delete('/:id', verify, (req, res) => {
     Doctor.findByIdAndRemove(req.params.id).exec()
         .then( deletedDoctor => {
             if (deletedDoctor)
-                res.status(200).json({ ok: true, doctor: deletedDoctor });
+                res.status(200).json({ ok: true, deletedDoctor });
             else
                 res.status(400).json({ ok: false, message: `El doctor con id: ${ req.params.id } no existe` });
 		})

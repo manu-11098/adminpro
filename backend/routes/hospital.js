@@ -30,6 +30,21 @@ app.get('/', (req, res) => {
         .catch( errors => res.status(500).json({ ok: false, message: 'Error en la base de datos', errors }) );
 });
 
+/**
+ * Get by id
+ */
+app.get('/:id', async (req, res) => {
+    try {
+        let hospital = await Hospital.findById(req.params.id).populate('user', 'name email').exec();
+        if (hospital) 
+            res.status(200).json({ ok: true, hospital });
+        else
+            res.status(401).json( { ok: false, message: `El hospital con id: ${ req.params.id } no existe` } ); 
+    } catch (error) {
+        res.status(500).json( { ok: false, message: 'Error al buscar el hospital', error } )
+    }
+});
+
 
 /**
  * Add hospital
@@ -37,7 +52,6 @@ app.get('/', (req, res) => {
 app.post('/', verify, (req, res) => {
     var hospital = new Hospital({
 		name: req.body.name,
-		user: req.user._id
     });
 
     hospital.save()
@@ -54,9 +68,8 @@ app.put('/:id', verify, async (req, res) => {
         let hospital = await Hospital.findById(req.params.id).exec();
         if (hospital) {
             hospital.name = req.body.name;
-            hospital.user = req.user._id;
             hospital = await hospital.save();
-            res.status(200).json({ ok: true, hospital });
+            res.status(200).json({ ok: true, updatedHospital: hospital });
         } else 
             res.status(401).json( { ok: false, message: `El hospital con id: ${ req.params.id } no existe` } );
     } catch ( error ){
