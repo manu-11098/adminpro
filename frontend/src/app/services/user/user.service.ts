@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { User } from '../../models/user.model';
-import { map } from 'rxjs/operators';
+import { map, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 import { environment } from '../../../environments/environment';
 
@@ -12,12 +12,15 @@ export class UserService {
 
   public user: User;
   public token: string;
+  public menu: any[] = [];
 
   private readonly url: string = 'http://localhost:3000';
   constructor(public http: HttpClient, private router: Router) { 
     this.token = localStorage.getItem('token') || '';
     if (localStorage.getItem('user'))
       this.user = JSON.parse(localStorage.getItem('user'));
+    if (localStorage.getItem('menu'))
+      this.menu = JSON.parse(localStorage.getItem('menu'));
    }
 
   public save(user: User) {
@@ -29,6 +32,7 @@ export class UserService {
     return this.http.put(url, user).pipe( map( (data: any) => {
       this.user = data.user;
       localStorage.setItem('user', JSON.stringify(data.user));
+      localStorage.setItem('menu', JSON.stringify(data.menu));
       return data.user;
     }));
   }
@@ -36,11 +40,14 @@ export class UserService {
   public loginByGoogle(token: string) {
     return this.http.post(`${ environment.URL }/login/google`, { token }).pipe( 
       map( ( data: any ) => {
+        console.log(data);
         localStorage.setItem('id', data.user._id);
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('menu', JSON.stringify(data.menu));
         this.user = data.user;
         this.token = data.token;
+        this.menu = data.menu;
         return data.user;
       })
     );
@@ -54,19 +61,24 @@ export class UserService {
         localStorage.setItem('id', data.user._id);
         localStorage.setItem('token', data.token);
         localStorage.setItem('user', JSON.stringify(data.user));
+        localStorage.setItem('menu', JSON.stringify(data.menu));
         this.user = data.user;
         this.token = data.token;
+        this.menu = data.menu;
         return data.user;
-      }) 
+      })
     );
   }
 
   public logout() {
     this.user = null;
     this.token = '';
+    this.menu = [];
     localStorage.removeItem('user');
     localStorage.removeItem('token');
     localStorage.removeItem('id');
+    localStorage.removeItem('menu');
+
   }
 
   public isLogged(): boolean { return this.token.length > 0; }

@@ -54,14 +54,21 @@ export class RegisterComponent implements OnInit {
         });
       } else {
         let user = new User(this.form.value.name, this.form.value.email, this.form.value.password);
-        this.userService.save(user).subscribe( ( newUser: any ) => { 
-          Swal.fire({
-            title: 'Usuario creado correctamente',
-            text: newUser.email,
-            icon: 'success'
-          });  
-          this.router.navigate( ['/login'] );
-        } );
+        this.userService.save(user).subscribe( 
+          ( newUser: any ) => { 
+            Swal.fire({
+              title: 'Usuario creado correctamente',
+              text: newUser.email,
+              icon: 'success'
+            });  
+            this.router.navigate( ['/login'] );
+          }, (error: any) => {
+            Swal.fire(
+              `${error.error.message}`,
+              `${error.error.errors.message}`,
+              'error');
+          }
+        );
       }
         
 

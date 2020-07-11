@@ -16,15 +16,15 @@ var app = express();
  */
 app.get('/all/:value', (req, res) => {
 	const value = req.params.value;
-    const userPromise     = User.find( {}, 'name email role' )
+    const userPromise     = User.find( {}, 'name email role img' )
                                 .or([{ name: { $regex: value, $options: 'i' } }, { email: { $regex: value, $options: 'i' } } ] )
                                 .exec();
     const doctorPromise   = Doctor.find( { name: { $regex: value, $options: 'i' } } )
-								  .populate('user', 'name email role')
+								  .populate('user', 'name email img')
 								  .populate('hospital')
 								  .exec();
     const hospitalPromise = Hospital.find( { name: { $regex: value, $options: 'i' } } )
-                                	.populate('user', 'name email role')
+                                	.populate('user', 'name email img')
                                 	.exec();
 
 	Promise.all([userPromise, doctorPromise, hospitalPromise])
@@ -43,19 +43,19 @@ app.get('/collections/:collection/:value', (req, res) => {
     let promise;
 
     switch(collection) {
-        case 'users':   promise = User.find({}, 'name email role')
+        case 'users':   promise = User.find({}, 'name email role img')
                             .or([{ name: { $regex: value, $options: 'i' }}, { email: { $regex: value, $options: 'i' }}])
                             .exec();
                         break;
         case 'doctors': promise = Doctor
                             .find( { name: { $regex: value, $options: 'i' }})
-                            .populate('user', 'name email role')
+                            .populate('user', 'name email img')
                             .populate('hospital')
                             .exec();
                         break;
         case 'hospitals': promise = Hospital
                             .find( { name: { $regex: value, $options: 'i' }})
-                            .populate('user', 'name email role')
+                            .populate('user', 'name email img')
                             .exec();
                         break;
         default: 

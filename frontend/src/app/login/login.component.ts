@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { UserService } from '../services/user/user.service';
 
+import Swal from 'sweetalert2';
+
 declare function init();
 declare const gapi: any;
 
@@ -31,13 +33,20 @@ export class LoginComponent implements OnInit {
 
   login(form: NgForm) {
     if (form.valid) {
-      this.userService.login(form.value.email, form.value.password).subscribe( user => {
-        if (form.value.rememberme)
-          this.userService.saveEmail(form.value.email);
-        else 
-          this.userService.deleteEmail();
-        this.router.navigate(['/dashboard']);
-      });
+      this.userService.login(form.value.email, form.value.password).subscribe( 
+        user => {
+          if (form.value.rememberme)
+            this.userService.saveEmail(form.value.email);
+          else 
+            this.userService.deleteEmail();
+          this.router.navigate(['/dashboard']);
+        }, (error: any) => {
+          Swal.fire(
+            'Error en el login',
+            `${error.error.message}`,
+            'error');
+        }
+      );
     }
 
     // this.router.navigate(['/dashboard']);

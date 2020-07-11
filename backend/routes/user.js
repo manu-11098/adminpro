@@ -12,6 +12,8 @@ var authentification    = require('../middlewares/authentification');
  */
 var app         = express();
 var verify      = authentification.verify;
+var verify_role = authentification.verify_role;
+var verify_user_update = authentification.verify_user_update
 
 /**
  * Get all users
@@ -53,7 +55,7 @@ app.post('/', (req, res) => {
 /**
  * Update user
  */
-app.put('/:id', verify, async (req, res) => { 
+app.put('/:id', [verify, verify_user_update], async (req, res) => { 
 
     try {
         let user = await User.findById(req.params.id).exec();
@@ -74,7 +76,7 @@ app.put('/:id', verify, async (req, res) => {
 /**
  * Delete user
  */
-app.delete('/:id', verify, (req, res) => {
+app.delete('/:id', [verify, verify_role], (req, res) => {
     User.findByIdAndRemove(req.params.id).exec()
         .then( deletedUser => { 
             if (deletedUser)

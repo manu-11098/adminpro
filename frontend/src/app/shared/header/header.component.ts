@@ -22,4 +22,8 @@ export class HeaderComponent implements OnInit {
     this.userService.logout();
     this.router.navigate(['/login']);
   }
+
+  public search(value: string) {
+    this.router.navigate(['/search', value]);
+  }
 }

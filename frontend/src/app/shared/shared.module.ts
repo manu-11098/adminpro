@@ -7,6 +7,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { BreadcrumbsComponent } from './breadcrumbs/breadcrumbs.component';
 import { NopagefoundComponent } from './nopagefound/nopagefound.component';
 import { PipesModule } from '../pipes/pipes.module';
+import { FormsModule } from '@angular/forms';
 
 
 
@@ -15,7 +16,8 @@ import { PipesModule } from '../pipes/pipes.module';
     imports: [ 
         RouterModule,
         CommonModule,
-        PipesModule
+        PipesModule,
+        FormsModule
     ],
     declarations: [
         HeaderComponent,
