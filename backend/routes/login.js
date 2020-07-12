@@ -1,13 +1,13 @@
-var express = require('express');
-var bcrypt = require('bcryptjs');
-var User = require('../models/user');
-var jwt = require('jsonwebtoken');
-const SEED = require('../config/config').seed;
-const ID = require('../config/config').google_client_id;
+var express 			= require('express');
+var bcrypt 				= require('bcryptjs');
+var User 				= require('../models/user');
+var jwt 				= require('jsonwebtoken');
+const SEED 				= require('../config/config').seed;
+const ID 				= require('../config/config').google_client_id;
 const {
 	OAuth2Client
 } = require('google-auth-library');
-
+var authentification    = require('../middlewares/authentification');
 /**
  * Variables
  */
@@ -15,7 +15,6 @@ var app = express();
 var client = new OAuth2Client(ID);
 
 // Routes
-
 async function verify(token) {
 	const ticket = await client.verifyIdToken({
 		idToken: token,
@@ -188,5 +187,12 @@ getMenu = function (role) {
 	return menu;
 };
 
+app.get('/renew', authentification.verify ,(req, res) => {
+	const token = jwt.sign( { data: req.user }, SEED, { expiresIn: 14400 });
+	res.status(200).json({
+		ok: true,
+		token
+	});
+});
 
 module.exports = app;

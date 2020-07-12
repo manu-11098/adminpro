@@ -14,14 +14,24 @@ export class UserService {
   public token: string;
   public menu: any[] = [];
 
-  private readonly url: string = 'http://localhost:3000';
   constructor(public http: HttpClient, private router: Router) { 
     this.token = localStorage.getItem('token') || '';
     if (localStorage.getItem('user'))
       this.user = JSON.parse(localStorage.getItem('user'));
     if (localStorage.getItem('menu'))
       this.menu = JSON.parse(localStorage.getItem('menu'));
-   }
+  }
+
+  public renew() {
+    let url = `${environment.URL}/login/renew?token=${this.token}`;
+    return this.http.get(url).pipe( 
+      map( ( data: any ) => {
+        this.token = data.token;
+        localStorage.setItem('token', this.token);
+        return true;
+      })
+    )
+  }
 
   public save(user: User) {
     return this.http.post(`${ environment.URL }/user`, user).pipe( map( (data: any) => data.newUser ) );

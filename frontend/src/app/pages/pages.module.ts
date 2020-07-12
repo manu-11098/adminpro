@@ -32,7 +32,7 @@ import { SearchComponent } from './search/search.component';
 
 @NgModule({
     declarations: [
-        PagesComponent,
+        // PagesComponent,
         DashboardComponent,
         ProgressComponent,
         Graphics1Component,
@@ -43,25 +43,26 @@ import { SearchComponent } from './search/search.component';
         RxjsComponent,
         ProfileComponent,
         UserComponent,
-        ModalUploadComponent,
+        // ModalUploadComponent,
         HospitalComponent,
         DoctorComponent,
         DoctorsComponent,
         SearchComponent,
     ],
     exports: [
-        PagesComponent,
+        // PagesComponent,
         DashboardComponent,
         ProgressComponent,
         Graphics1Component
     ],
     imports: [
         CommonModule,
-        SharedModule,
+        // SharedModule,
+        PipesModule,
         ChartsModule,
         FormsModule,
         PagesRoutingModule,
-        PipesModule
+       
     ]
 })
 export class PagesModule { }
