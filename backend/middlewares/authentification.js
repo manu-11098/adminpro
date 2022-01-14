@@ -1,9 +1,9 @@
-var jwt 	            = require('jsonwebtoken');
-var seed 	            = require('../config/config').seed;
+var jwt = require('jsonwebtoken');
+var seed = require('../config/config').seed;
 
-exports.verify = ( req, res, next ) => {
+exports.verify = (req, res, next) => {
     jwt.verify(req.query.token, seed, (err, decoded) => {
-        if (err) 
+        if (err)
             return res.status(401).json({
                 ok: false,
                 message: 'Incorrect token',
@@ -14,7 +14,7 @@ exports.verify = ( req, res, next ) => {
     });
 };
 
-exports.verify_role = ( req, res, next ) => {
+exports.verify_role = (req, res, next) => {
 
     let user = req.user;
 
@@ -26,10 +26,8 @@ exports.verify_role = ( req, res, next ) => {
             message: 'Usuario con permisos insuficientes',
             errors: 'Usuario con permisos insuficientes'
         });
-
-
 };
-exports.verify_user_update = ( req, res, next ) => {
+exports.verify_user_update = (req, res, next) => {
 
     let user = req.user;
     var id = req.params.id;
@@ -42,6 +40,4 @@ exports.verify_user_update = ( req, res, next ) => {
             message: 'Es distinto usuario',
             errors: 'Usuario con permisos insuficientes'
         });
-
-
 };

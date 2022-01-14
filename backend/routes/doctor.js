@@ -1,35 +1,22 @@
 /**
  * Requires
  */
-var express     = require('express');
-var Doctor      = require('../models/doctor');
-var authentification    = require('../middlewares/authentification');
-var verify      = authentification.verify;
+var express = require('express');
+var Doctor = require('../models/doctor');
+var DoctorController = require('../controllers/doctor.controller')
+var authentification = require('../middlewares/authentification');
+var verify = authentification.verify;
 
 /**
  * Init variables
  */
-var app         = express();
-var verify      = authentification.verify;
+var app = express();
+var verify = authentification.verify;
 
 /**
  * Get all doctors
  */
-app.get('/', (req, res) => {
-    let from = Number(req.query.from) || 0;
-    Doctor.find({})
-        .skip(from)
-        .limit(5)
-        .populate('user', 'name email')
-        .populate('hospital')
-        .exec()
-        .then( doctors => {
-            Doctor.count({})
-            .exec()
-            .then( count =>  res.status(200).json( { ok: true, doctors, count } ) ) 
-        })
-        .catch( errors => res.status(500).json({ ok: false, message: 'Error en la base de datos', errors }) );
-});
+app.get('/', DoctorController.get);
 
 /**
  * Get by id
@@ -37,16 +24,16 @@ app.get('/', (req, res) => {
 app.get('/:id', async (req, res) => {
     try {
         let doctor = await Doctor.findById(req.params.id)
-        .populate('user', 'name email img')
-        .populate('hospital')
-        .exec();
+            .populate('user', 'name email img')
+            .populate('hospital')
+            .exec();
 
-        if (doctor) 
+        if (doctor)
             res.status(200).json({ ok: true, doctor });
         else
-            res.status(401).json( { ok: false, message: `El doctor con id: ${ req.params.id } no existe` } ); 
+            res.status(401).json({ ok: false, message: `El doctor con id: ${req.params.id} no existe` });
     } catch (error) {
-        res.status(500).json( { ok: false, message: 'Error al buscar el doctor', error } )
+        res.status(500).json({ ok: false, message: 'Error al buscar el doctor', error })
     }
 });
 
@@ -61,8 +48,8 @@ app.post('/', verify, (req, res) => {
         hospital: req.body.hospital
     });
     doctor.save()
-        .then(newDoctor => res.status(200).json({  ok: true, newDoctor }) )
-        .catch( err => res.status(500).json({ ok: false, message: 'Error interno al crear el médico', errors: err }) );
+        .then(newDoctor => res.status(200).json({ ok: true, newDoctor }))
+        .catch(err => res.status(500).json({ ok: false, message: 'Error interno al crear el médico', errors: err }));
 });
 
 /**
@@ -77,10 +64,10 @@ app.put('/:id', verify, async (req, res) => {
             doctor.hospital = req.body.hospital;
             updatedDoctor = await doctor.save();
             res.status(200).json({ ok: true, updatedDoctor });
-        } else 
-            res.status(401).json( { ok: false, message: `El doctor con id: ${ req.params.id } no existe` } );
-    } catch ( error ){
-        res.status(500).json( { ok: false, message: 'Error al actualizar el doctor', error } );
+        } else
+            res.status(401).json({ ok: false, message: `El doctor con id: ${req.params.id} no existe` });
+    } catch (error) {
+        res.status(500).json({ ok: false, message: 'Error al actualizar el doctor', error });
     }
 });
 
@@ -89,13 +76,13 @@ app.put('/:id', verify, async (req, res) => {
  */
 app.delete('/:id', verify, (req, res) => {
     Doctor.findByIdAndRemove(req.params.id).exec()
-        .then( deletedDoctor => {
+        .then(deletedDoctor => {
             if (deletedDoctor)
                 res.status(200).json({ ok: true, deletedDoctor });
             else
-                res.status(400).json({ ok: false, message: `El doctor con id: ${ req.params.id } no existe` });
-		})
-		.catch( err => res.status(500).json({ ok: false,  message: 'Error interno al borrar hospital', errors: err }) );
+                res.status(400).json({ ok: false, message: `El doctor con id: ${req.params.id} no existe` });
+        })
+        .catch(err => res.status(500).json({ ok: false, message: 'Error interno al borrar hospital', errors: err }));
 });
 
 
